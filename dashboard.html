@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Liga Supertécnicos 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080a0f;
+    --surface: #111318;
+    --surface2: #191c24;
+    --border: #272b38;
+    --gold: #f5c842;
+    --gold2: #d4a017;
+    --silver: #a8b2c8;
+    --bronze: #cd7f3c;
+    --red: #e84040;
+    --green: #3ecf6e;
+    --blue: #4a8ff5;
+    --text: #f0f2f8;
+    --muted: #5e6780;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ─── HEADER ─── */
+  .header {
+    background: linear-gradient(180deg, #0e1018 0%, #111318 100%);
+    border-bottom: 2px solid var(--gold2);
+    padding: 18px 16px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .logo-wrap { display: flex; flex-direction: column; gap: 1px; }
+
+  .logo {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 28px;
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+  }
+
+  .logo-sub {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .round-badge {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--silver);
+  }
+
+  /* ─── NAV ─── */
+  .nav {
+    display: flex;
+    gap: 6px;
+    background: var(--surface2);
+    border-radius: 12px;
+    padding: 5px;
+  }
+
+  .nav-btn {
+    flex: 1;
+    padding: 10px 4px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'Barlow', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .nav-btn.active { background: var(--gold); color: #080a0f; }
+
+  /* ─── SECTIONS ─── */
+  .section { display: none; padding: 18px 14px 30px; }
+  .section.active { display: block; }
+
+  /* ─── SECTION TITLE ─── */
+  .sec-title {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: var(--silver);
+    margin-bottom: 14px;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .sec-title::after { content:''; flex:1; height:1px; background: var(--border); }
+
+  /* ─── PÓDIO ─── */
+  .podium {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+    padding: 0 4px;
+  }
+
+  .podium-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .podium-emoji { font-size: 22px; }
+
+  .podium-name {
+    font-size: 11px;
+    font-weight: 800;
+    text-align: center;
+    line-height: 1.2;
+    color: var(--text);
+    text-transform: uppercase;
+  }
+
+  .podium-pts {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 19px;
+    color: var(--gold);
+  }
+
+  .podium-block {
+    width: 100%;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', cursive;
+    font-size: 32px;
+  }
+
+  .podium-item:nth-child(1) .podium-block { height: 88px; background: linear-gradient(to top, #7a6000, #c49000); color:#080a0f; }
+  .podium-item:nth-child(2) .podium-block { height: 120px; background: linear-gradient(to top, #a07800, #f5c842); color:#080a0f; box-shadow: 0 0 22px rgba(245,200,66,0.25); }
+  .podium-item:nth-child(3) .podium-block { height: 68px; background: linear-gradient(to top, #6a3a10, #b06828); color:#080a0f; }
+
+  /* ─── LEADERBOARD ─── */
+  .leaderboard { display: flex; flex-direction: column; gap: 10px; }
+
+  .team-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .team-card::before {
+    content:'';
+    position:absolute;
+    left:0; top:0; bottom:0;
+    width:4px;
+    border-radius:14px 0 0 14px;
+  }
+
+  .team-card.pos-1::before { background: var(--gold); }
+  .team-card.pos-2::before { background: var(--silver); }
+  .team-card.pos-3::before { background: var(--bronze); }
+  .team-card.pos-4::before,.team-card.pos-5::before,.team-card.pos-6::before { background: var(--blue); }
+  .team-card.pos-7::before,.team-card.pos-8::before,.team-card.pos-9::before { background: var(--red); }
+
+  .team-pos {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 30px;
+    width: 32px;
+    text-align: center;
+    flex-shrink: 0;
+    color: var(--muted);
+  }
+
+  .team-card.pos-1 .team-pos { color: var(--gold); }
+  .team-card.pos-2 .team-pos { color: var(--silver); }
+  .team-card.pos-3 .team-pos { color: var(--bronze); }
+
+  .team-info { flex: 1; min-width: 0; }
+
+  .team-name {
+    font-size: 16px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .team-rounds {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin-bottom: 5px;
+  }
+
+  .round-pill {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--silver);
+  }
+
+  .stat-badges { display: flex; gap: 5px; flex-wrap: wrap; }
+
+  .stat-badge {
+    border-radius: 5px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .badge-mvp    { background: rgba(245,200,66,0.12); color: var(--gold);  border: 1px solid rgba(245,200,66,0.3); }
+  .badge-mita   { background: rgba(62,207,110,0.10); color: var(--green); border: 1px solid rgba(62,207,110,0.3); }
+  .badge-lantern{ background: rgba(232,64,64,0.10);  color: var(--red);   border: 1px solid rgba(232,64,64,0.3); }
+
+  .prog-wrap { margin-top: 7px; }
+  .prog-bar { height: 4px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+  .prog-fill { height: 100%; border-radius: 3px; background: linear-gradient(to right, var(--gold2), var(--gold)); }
+
+  .team-right { text-align: right; flex-shrink: 0; }
+  .team-total { font-family: 'Bebas Neue', cursive; font-size: 30px; color: var(--gold); line-height: 1; }
+  .team-total-label { font-size: 10px; color: var(--muted); font-weight: 700; letter-spacing: 1px; }
+
+  /* ─── ROUNDS ─── */
+  .rounds-list { display: flex; flex-direction: column; gap: 20px; }
+
+  .round-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    animation: fadeUp 0.35s ease both;
+  }
+
+  .round-header {
+    background: var(--surface2);
+    padding: 14px 16px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .round-title {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+
+  .round-highlights { display: flex; flex-direction: column; gap: 7px; }
+
+  .highlight-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    border-radius: 9px;
+  }
+
+  .hl-mvp     { background: rgba(245,200,66,0.10); border: 1px solid rgba(245,200,66,0.25); }
+  .hl-mita    { background: rgba(62,207,110,0.08); border: 1px solid rgba(62,207,110,0.22); }
+  .hl-lantern { background: rgba(232,64,64,0.08);  border: 1px solid rgba(232,64,64,0.22); }
+
+  .hl-icon  { font-size: 20px; flex-shrink: 0; }
+  .hl-label { font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; flex-shrink: 0; min-width: 48px; }
+
+  .hl-mvp     .hl-label { color: var(--gold); }
+  .hl-mita    .hl-label { color: var(--green); }
+  .hl-lantern .hl-label { color: var(--red); }
+
+  .hl-name {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .hl-pts { font-family: 'Bebas Neue', cursive; font-size: 20px; flex-shrink: 0; }
+
+  .hl-mvp     .hl-pts { color: var(--gold); }
+  .hl-mita    .hl-pts { color: var(--green); }
+  .hl-lantern .hl-pts { color: var(--red); }
+
+  /* Results list */
+  .round-results { padding: 10px; display: flex; flex-direction: column; gap: 5px; }
+
+  .result-row {
+    display: flex;
+    align-items: center;
+    padding: 11px 12px;
+    border-radius: 10px;
+    gap: 10px;
+    background: var(--surface2);
+  }
+
+  .result-row.is-mvp     { background: rgba(245,200,66,0.07); }
+  .result-row.is-mita    { outline: 1px solid rgba(62,207,110,0.22); }
+  .result-row.is-lantern { background: rgba(232,64,64,0.06); }
+
+  .result-rank {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 20px;
+    color: var(--muted);
+    width: 22px;
+    flex-shrink: 0;
+    text-align: center;
+  }
+  .result-row.is-mvp .result-rank { color: var(--gold); }
+
+  .result-team {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .result-emojis { font-size: 15px; flex-shrink: 0; }
+
+  .result-pts {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 22px;
+    flex-shrink: 0;
+    min-width: 56px;
+    text-align: right;
+  }
+
+  .pts-fire { color: var(--green); }
+  .pts-ok   { color: var(--text); }
+  .pts-bad  { color: var(--red); }
+
+  /* ─── STATS ─── */
+  .stats-grid { display: flex; flex-direction: column; gap: 14px; }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    animation: fadeUp 0.35s ease both;
+  }
+
+  .stat-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sc-icon  { font-size: 28px; }
+  .sc-title { font-family: 'Bebas Neue', cursive; font-size: 22px; letter-spacing: 1.5px; flex: 1; }
+
+  .sc-mvp     { background: rgba(245,200,66,0.07); }
+  .sc-mita    { background: rgba(62,207,110,0.06); }
+  .sc-lantern { background: rgba(232,64,64,0.06); }
+
+  .sc-mvp     .sc-title { color: var(--gold); }
+  .sc-mita    .sc-title { color: var(--green); }
+  .sc-lantern .sc-title { color: var(--red); }
+
+  .stat-rows { padding: 10px; display: flex; flex-direction: column; gap: 5px; }
+
+  .stat-row {
+    display: flex;
+    align-items: center;
+    padding: 11px 12px;
+    background: var(--surface2);
+    border-radius: 10px;
+    gap: 12px;
+  }
+
+  .sr-pos {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 22px;
+    color: var(--muted);
+    width: 24px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .stat-row:nth-child(1) .sr-pos { color: var(--gold); }
+
+  .sr-name {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .sr-count {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 30px;
+    flex-shrink: 0;
+  }
+
+  .sr-unit { font-size: 10px; color: var(--muted); font-weight: 700; text-align: right; }
+  .c-mvp     { color: var(--gold); }
+  .c-mita    { color: var(--green); }
+  .c-lantern { color: var(--red); }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity:0; transform: translateY(14px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+
+  .team-card:nth-child(1){animation-delay:.05s}
+  .team-card:nth-child(2){animation-delay:.10s}
+  .team-card:nth-child(3){animation-delay:.15s}
+  .team-card:nth-child(4){animation-delay:.20s}
+  .team-card:nth-child(5){animation-delay:.25s}
+  .team-card:nth-child(6){animation-delay:.30s}
+  .team-card:nth-child(7){animation-delay:.35s}
+  .team-card:nth-child(8){animation-delay:.40s}
+  .team-card:nth-child(9){animation-delay:.45s}
+
+  .footer { text-align:center; padding:24px 16px; font-size:13px; color:var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="logo-wrap">
+      <div class="logo">⚽ Supertécnicos</div>
+      <div class="logo-sub">Liga 2026 — Cartola FC</div>
+    </div>
+    <div class="round-badge" id="roundBadge">...</div>
+  </div>
+  <nav class="nav">
+    <button class="nav-btn active" onclick="showSection('geral',this)">🏆 Geral</button>
+    <button class="nav-btn" onclick="showSection('rodadas',this)">📅 Rodadas</button>
+    <button class="nav-btn" onclick="showSection('stats',this)">📊 Stats</button>
+  </nav>
+</div>
+
+<div id="geral"  class="section active"></div>
+<div id="rodadas" class="section"></div>
+<div id="stats"  class="section"></div>
+
+<div class="footer">Liga Supertécnicos 2026</div>
+
+<script>
+// ============================================================
+//  CSV
+// ============================================================
+async function loadCSV() {
+  try {
+    const r = await fetch('dados.csv');
+    if (!r.ok) throw 0;
+    return parseCSV(await r.text());
+  } catch(e) { return defaultData(); }
+}
+
+function parseCSV(txt) {
+  return txt.trim().split('\n').slice(1).map(line => {
+    const c = line.split(',').map(s => s.trim().replace(/"/g,''));
+    return { rodada: parseInt(c[0]), time: c[1], pontos: parseFloat(c[2]) };
+  }).filter(r => r.rodada && r.time && !isNaN(r.pontos));
+}
+
+function defaultData() {
+  return [
+    {rodada:1,time:"Sons of Númenor",pontos:78.16},{rodada:1,time:"Ironverdict",pontos:73.20},
+    {rodada:1,time:"Icebergteam",pontos:72.96},{rodada:1,time:"Andorinha Jr",pontos:69.05},
+    {rodada:1,time:"Andorinha",pontos:68.66},{rodada:1,time:"CEEC",pontos:67.86},
+    {rodada:1,time:"Varelitas",pontos:67.70},{rodada:1,time:"Otopatamá",pontos:66.76},
+    {rodada:1,time:"Lobo Negro",pontos:25.02},
+    {rodada:2,time:"Icebergteam",pontos:82.90},{rodada:2,time:"Lobo Negro",pontos:79.48},
+    {rodada:2,time:"Ironverdict",pontos:76.10},{rodada:2,time:"Sons of Númenor",pontos:73.30},
+    {rodada:2,time:"CEEC",pontos:73.10},{rodada:2,time:"Otopatamá",pontos:72.58},
+    {rodada:2,time:"Andorinha Jr",pontos:68.38},{rodada:2,time:"Andorinha",pontos:63.28},
+    {rodada:2,time:"Varelitas",pontos:63.10},
+    {rodada:3,time:"Ironverdict",pontos:95.16},{rodada:3,time:"Andorinha Jr",pontos:93.16},
+    {rodada:3,time:"Andorinha",pontos:91.66},{rodada:3,time:"Lobo Negro",pontos:89.46},
+    {rodada:3,time:"CEEC",pontos:87.16},{rodada:3,time:"Icebergteam",pontos:82.66},
+    {rodada:3,time:"Otopatamá",pontos:81.06},{rodada:3,time:"Sons of Númenor",pontos:74.36},
+    {rodada:3,time:"Varelitas",pontos:65.54}
+  ];
+}
+
+// ============================================================
+//  PROCESSAMENTO
+// ============================================================
+function processData(data) {
+  const timesMap = {};
+  const rodadasMap = {};
+  let maxRodada = 0;
+
+  data.forEach(row => {
+    if (!timesMap[row.time]) timesMap[row.time] = { nome: row.time, rodadas:{}, total:0, mvpCount:0, mitaCount:0, lanternCount:0 };
+    timesMap[row.time].rodadas[row.rodada] = row.pontos;
+    timesMap[row.time].total += row.pontos;
+    if (!rodadasMap[row.rodada]) rodadasMap[row.rodada] = [];
+    rodadasMap[row.rodada].push({ time: row.time, pontos: row.pontos });
+    if (row.rodada > maxRodada) maxRodada = row.rodada;
+  });
+
+  const rodadas = {};
+  Object.keys(rodadasMap).forEach(r => {
+    const sorted = [...rodadasMap[r]].sort((a,b) => b.pontos - a.pontos);
+    rodadas[r] = sorted;
+    const mvp = sorted[0];
+    const lantern = sorted[sorted.length-1];
+    timesMap[mvp.time].mvpCount++;
+    timesMap[lantern.time].lanternCount++;
+    sorted.filter(t => t.pontos >= 80).forEach(t => timesMap[t.time].mitaCount++);
+  });
+
+  const ranking = Object.values(timesMap).sort((a,b) => b.total - a.total);
+  return { ranking, rodadas, maxRodada };
+}
+
+// ============================================================
+//  RENDER — GERAL
+// ============================================================
+function renderGeral({ ranking, maxRodada }) {
+  const maxTotal = ranking[0]?.total || 1;
+  const top3 = ranking.slice(0,3);
+  const medals = ['🥇','🥈','🥉'];
+  const podiumOrder = [1,0,2];
+
+  let html = `<div class="sec-title">PÓDIO</div><div class="podium">`;
+  podiumOrder.forEach(i => {
+    const t = top3[i]; if (!t) return;
+    html += `
+      <div class="podium-item">
+        <div class="podium-emoji">${medals[i]}</div>
+        <div class="podium-name">${t.nome}</div>
+        <div class="podium-pts">${t.total.toFixed(1)}</div>
+        <div class="podium-block">${i+1}</div>
+      </div>`;
+  });
+  html += `</div>`;
+
+  html += `<div class="sec-title">CLASSIFICAÇÃO</div><div class="leaderboard">`;
+  ranking.forEach((t,i) => {
+    const pos = i+1;
+    const pct = (t.total/maxTotal*100).toFixed(1);
+    const rounds = Array.from({length:maxRodada},(_,r) => {
+      const pts = t.rodadas[r+1];
+      return `<span class="round-pill">R${r+1}: ${pts!=null?pts.toFixed(1):'-'}</span>`;
+    }).join('');
+
+    const badges = [];
+    if (t.mvpCount>0)     badges.push(`<span class="stat-badge badge-mvp">🏆 MVP ×${t.mvpCount}</span>`);
+    if (t.mitaCount>0)    badges.push(`<span class="stat-badge badge-mita">⚡ MITOU ×${t.mitaCount}</span>`);
+    if (t.lanternCount>0) badges.push(`<span class="stat-badge badge-lantern">🔻 LANTERNA ×${t.lanternCount}</span>`);
+
+    html += `
+      <div class="team-card pos-${pos}">
+        <div class="team-pos">${pos}</div>
+        <div class="team-info">
+          <div class="team-name">${t.nome}</div>
+          <div class="team-rounds">${rounds}</div>
+          ${badges.length?`<div class="stat-badges">${badges.join('')}</div>`:''}
+          <div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div></div>
+        </div>
+        <div class="team-right">
+          <div class="team-total">${t.total.toFixed(1)}</div>
+          <div class="team-total-label">PTS</div>
+        </div>
+      </div>`;
+  });
+  html += `</div>`;
+  document.getElementById('geral').innerHTML = html;
+}
+
+// ============================================================
+//  RENDER — RODADAS
+// ============================================================
+function renderRodadas({ rodadas }) {
+  let html = `<div class="rounds-list">`;
+  Object.keys(rodadas).sort((a,b)=>b-a).forEach(r => {
+    const times = rodadas[r];
+    const mvp = times[0];
+    const lantern = times[times.length-1];
+    const mitas = times.filter(t => t.pontos >= 80);
+
+    html += `
+      <div class="round-card">
+        <div class="round-header">
+          <div class="round-title">RODADA ${r}</div>
+          <div class="round-highlights">
+            <div class="highlight-row hl-mvp">
+              <span class="hl-icon">🏆</span>
+              <span class="hl-label">MVP</span>
+              <span class="hl-name">${mvp.time}</span>
+              <span class="hl-pts">${mvp.pontos.toFixed(2)}</span>
+            </div>`;
+
+    if (mitas.length > 0) {
+      html += `
+            <div class="highlight-row hl-mita">
+              <span class="hl-icon">⚡</span>
+              <span class="hl-label">MITOU</span>
+              <span class="hl-name" style="font-size:12px">${mitas.map(t=>t.time.toUpperCase()).join(', ')}</span>
+              <span class="hl-pts" style="font-size:14px">+80</span>
+            </div>`;
+    } else {
+      html += `
+            <div class="highlight-row hl-mita" style="opacity:0.4">
+              <span class="hl-icon">⚡</span>
+              <span class="hl-label">MITOU</span>
+              <span class="hl-name">Ninguém passou de 80</span>
+              <span class="hl-pts">—</span>
+            </div>`;
+    }
+
+    html += `
+            <div class="highlight-row hl-lantern">
+              <span class="hl-icon">🔻</span>
+              <span class="hl-label">LANTERNA</span>
+              <span class="hl-name">${lantern.time}</span>
+              <span class="hl-pts">${lantern.pontos.toFixed(2)}</span>
+            </div>
+          </div>
+        </div>
+        <div class="round-results">`;
+
+    times.forEach((t,i) => {
+      const isMvp = i===0;
+      const isMita = t.pontos >= 80;
+      const isLantern = i===times.length-1;
+      const ptsClass = t.pontos>=80?'pts-fire':t.pontos>=65?'pts-ok':'pts-bad';
+      let rowClass = '';
+      if (isMvp) rowClass='is-mvp';
+      else if (isLantern) rowClass='is-lantern';
+      else if (isMita) rowClass='is-mita';
+
+      const emojis = [];
+      if (isMvp) emojis.push('🏆');
+      if (isMita && !isMvp) emojis.push('⚡');
+      if (isLantern) emojis.push('🔻');
+
+      html += `
+        <div class="result-row ${rowClass}">
+          <div class="result-rank">${i+1}</div>
+          <div class="result-team">${t.time}</div>
+          <div class="result-emojis">${emojis.join('')}</div>
+          <div class="result-pts ${ptsClass}">${t.pontos.toFixed(2)}</div>
+        </div>`;
+    });
+
+    html += `</div></div>`;
+  });
+  html += `</div>`;
+  document.getElementById('rodadas').innerHTML = html;
+}
+
+// ============================================================
+//  RENDER — STATS
+// ============================================================
+function renderStats({ ranking }) {
+  function card(title, icon, scClass, countClass, unit, sorted, field) {
+    const rows = sorted.map((t,i) => `
+      <div class="stat-row">
+        <div class="sr-pos">${i+1}</div>
+        <div class="sr-name">${t.nome}</div>
+        <div style="text-align:right">
+          <div class="sr-count ${countClass}">${t[field]}</div>
+          <div class="sr-unit">${unit}</div>
+        </div>
+      </div>`).join('');
+    return `
+      <div class="stat-card">
+        <div class="stat-card-header ${scClass}">
+          <span class="sc-icon">${icon}</span>
+          <span class="sc-title">${title}</span>
+        </div>
+        <div class="stat-rows">${rows}</div>
+      </div>`;
+  }
+
+  const byMvp     = [...ranking].sort((a,b) => b.mvpCount - a.mvpCount);
+  const byMita    = [...ranking].sort((a,b) => b.mitaCount - a.mitaCount);
+  const byLantern = [...ranking].sort((a,b) => b.lanternCount - a.lanternCount);
+
+  let html = `<div class="sec-title">RECORDES DA LIGA</div><div class="stats-grid">`;
+  html += card('MAIS MVPs',     '🏆', 'sc-mvp',     'c-mvp',     'vezes 1º',       byMvp,     'mvpCount');
+  html += card('MAIS MITADAS',  '⚡', 'sc-mita',    'c-mita',    'rodadas +80 pts', byMita,    'mitaCount');
+  html += card('MAIS LANTERNAS','🔻', 'sc-lantern', 'c-lantern', 'vezes último',    byLantern, 'lanternCount');
+  html += `</div>`;
+  document.getElementById('stats').innerHTML = html;
+}
+
+// ============================================================
+//  NAV
+// ============================================================
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+async function init() {
+  const data = await loadCSV();
+  const processed = processData(data);
+  document.getElementById('roundBadge').textContent = `${processed.maxRodada} / 38 rodadas`;
+  renderGeral(processed);
+  renderRodadas(processed);
+  renderStats(processed);
+}
+
+init();
+</script>
+</body>
+</html>
