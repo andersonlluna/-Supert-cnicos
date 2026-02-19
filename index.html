@@ -492,11 +492,21 @@
 //  CSV
 // ============================================================
 async function loadCSV() {
-  try {
-    const r = await fetch('dados.csv');
-    if (!r.ok) throw 0;
-    return parseCSV(await r.text());
-  } catch(e) { return defaultData(); }
+  // Cache-busting para garantir dados frescos a cada acesso
+  const cacheBust = '?v=' + Date.now();
+  const urls = [
+    'dados.csv' + cacheBust,
+    'https://raw.githubusercontent.com/andersonlluna/-Supert-cnicos/main/dados.csv' + cacheBust
+  ];
+  for (const url of urls) {
+    try {
+      const r = await fetch(url);
+      if (!r.ok) continue;
+      const text = await r.text();
+      if (text.trim().length > 10) return parseCSV(text);
+    } catch(e) { continue; }
+  }
+  return defaultData();
 }
 
 function parseCSV(txt) {
